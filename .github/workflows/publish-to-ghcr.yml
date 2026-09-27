@@ -1,25 +1,38 @@
-name: Build and publish a Docker image to ghcr.io
+name: Build and Push to GHCR
 
 on:
-  # publish on releases, e.g. v2.1.13 (image tagged as "2.1.13" - "v" prefix is removed)
   release:
     types: [ published ]
 
-  # publish on pushes to the main branch (image tagged as "latest")
-  push:
-    branches:
-      - master
-
 jobs:
-  docker_publish:
-    runs-on: "ubuntu-latest"
-
+  build-andpush:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # https://github.com/marketplace/actions/push-to-ghcr
-      - name: Build and publish a Docker image for ${{ github.repository }}
-        uses: macbre/push-to-ghcr@master
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          image_name: ${{ github.repository }}  # it will be lowercased internally
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Generate image tag
+        id: vars
+        run: echo "tag=$(date +'%Y%m%d%H%M')" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ secrets.GHCR_USERNAME }}/docker-serve:latest
+            ghcr.io/${{ secrets.GHCR_USERNAME }}/docker-serve:${{ steps.vars.outputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
