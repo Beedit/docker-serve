@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node ./src/index.ts",
-    "build": "npx --package typescript tsc --project ./ && shx rm -rf dist/static && shx mkdir -p dist/static && shx cp -r ../files/ ./dist/static/",
+    "build": "npx --package typescript tsc --project ./ && shx rm -rf dist/static && shx mkdir -p dist/static && shx cp -r ../files/* ./dist/static/",
     "start": "npm run build && node dist/index.js"
   },
   "keywords": [],
