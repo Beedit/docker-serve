@@ -1,9 +1,36 @@
-const express = require('express');
+import express from 'express';
+import { simpleGit, type SimpleGit } from 'simple-git';
+
+
 const app = express();
 const port = 8800;
 
-app.use("/static", express.static(__dirname + '/static'));
+const git: SimpleGit = simpleGit();
+const gitPath = './static'
+const repo = String(process.env.GIT_URL)
 
-app.listen(port, () => {
-    console.log(`Serving files on ${port}`)
-});
+
+const init = async () => {
+    console.log(process.env.GIT_URL)
+    console.log(gitPath)
+    try {
+        await git
+            .clone(repo, gitPath)
+            .then (() => console.log(`Cloned ${repo} into ${gitPath}`))
+            .catch((err) => { throw err })
+    } catch (err) {
+        throw err
+    }
+}
+
+const main = async () => {
+    await init()
+
+    app.use("/static", express.static(gitPath));
+
+    app.listen(port, () => {
+        console.log(`Serving files on ${port}`)
+    });
+}
+
+main()
