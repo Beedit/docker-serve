@@ -3,7 +3,9 @@
 Simple docker container that clones a repo at runtime and serves it. That's all it does.
 
 ### Running with docker run
-```docker run -d -p HOST_PORT:8800 --env GIT_URL="put your git url here" ghcr.io/beedit/docker-serve:VERSION```
+```bash
+docker run -d -p HOST_PORT:8800 --env GIT_URL="put your git url here" ghcr.io/beedit/docker-serve:VERSION
+```
 
 ### Running with docker compose
 ```yaml
