@@ -1,6 +1,6 @@
 # Docker Serve
 
-Simple docker container that clones a repo at runtime and serves it. That's all it does.
+Simple docker container that clones a git repo at runtime and serves it. That's all it does.
 
 ### Running with docker run
 ```bash
