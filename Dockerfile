@@ -5,17 +5,19 @@ WORKDIR /app
 # Use port 8800
 EXPOSE 8800
 
-# chown the files that user node needs to have access to and switch user to node
+# Copy package.json and package-lock.json and install packages. 
 COPY package.json package-lock.json /app/
 RUN npm ci
 
+# Copy the rest of the program
 COPY . .
 
+# Change the owner of the files to node and switch user to node
 RUN chown -R node /app
 USER node
 
 # Build
 RUN npm run build
 
-# run the server
+# Run the server
 CMD npm run start
