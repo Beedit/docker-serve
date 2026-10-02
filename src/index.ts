@@ -11,8 +11,6 @@ const repo = String(process.env.GIT_URL)
 
 
 const init = async () => {
-    console.log(process.env.GIT_URL)
-    console.log(gitPath)
     try {
         await git
             .clone(repo, gitPath)
