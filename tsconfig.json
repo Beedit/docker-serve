@@ -8,7 +8,7 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "nodenext",
-    "target": "esnext",
+    "target": "es2020",
     // For nodejs:
     "lib": ["esnext"],
     "types": ["node"],
@@ -43,6 +43,5 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["src"],
 }
