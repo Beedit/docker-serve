@@ -1,5 +1,6 @@
 import express from "express";
 import { simpleGit } from "simple-git";
+import * as fs from "fs";
 
 import env from "./env.js";
 
@@ -12,6 +13,11 @@ const port = 8800;
 const init = async () => {
     const repo = ((env.USER && env.PASSWORD) ? `https://${env.USER}:${env.PASSWORD}@${env.GIT_URL}` : `https://${env.GIT_URL}`);
     const git = simpleGit();
+
+    // remove old static folder if it exists
+    if (fs.existsSync(gitPath)) {
+        fs.rmSync(gitPath, { recursive: true });
+    }
 
     await git
         .clone(repo, gitPath)
